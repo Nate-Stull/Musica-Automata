@@ -1,17 +1,37 @@
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
 public class Automata {
 
     public static void main (String args[]) {
-        char[] curGen = new char[101];
+        Scanner sc = new Scanner(System.in);
+        int arrLength = 0;
+        int intRule = 0;
+
+        while(arrLength == 0 || intRule == 0) {
+            try {
+                if(arrLength == 0) {
+                    System.out.print("Please enter an array length: ");
+                    arrLength = sc.nextInt();
+                }
+                if(intRule == 0) {
+                    System.out.print("Please enter a rule between 0 and 256 inclusive: ");
+                    intRule = sc.nextInt();
+                    if(intRule < 0 || intRule > 256) intRule = 0;
+                }
+            } catch (Exception e){
+                System.out.println("Invalid Input");
+            }
+        }
+
+        char[] curGen = new char[arrLength];
 
         curGen [curGen.length/2] = '1';//all generations start with array of 0's and 1 in middle
         for(int i = 0; i < curGen.length; i++) {//populating rest of array with 0's
             if(curGen[i] != '1') curGen[i] = '0';
         }
 
-        new Automata(30, new StringBuilder(), new StringBuilder(), new StringBuilder(), curGen);
+        new Automata(intRule, new StringBuilder(), new StringBuilder(), new StringBuilder(), curGen);
     }
 
     public Automata(int intRule, StringBuilder fourBitNum, StringBuilder eightBitNum, StringBuilder sixteenBitNum, char[] curGen){
