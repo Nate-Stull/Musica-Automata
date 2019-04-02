@@ -8,19 +8,25 @@ public class Automata {
         int arrLength = 0;
         int intRule = 0;
 
-        while(arrLength == 0 || intRule == 0) {
+        while(intRule == 0 || arrLength == 0) {
             try {
                 if(arrLength == 0) {
                     System.out.print("Please enter an array length: ");
                     arrLength = sc.nextInt();
+                    if(arrLength < 0) {
+                        System.out.println("Please enter a number greater than 0.");
+                        arrLength = 0;
+                        continue;
+                    }
                 }
-                if(intRule == 0) {
-                    System.out.print("Please enter a rule between 0 and 256 inclusive: ");
-                    intRule = sc.nextInt();
-                    if(intRule < 0 || intRule > 256) intRule = 0;
+                System.out.print("Please enter a rule between 0 and 256 inclusive: ");
+                intRule = sc.nextInt();
+                if(intRule < 0 || intRule > 256) {
+                    System.out.println("The rule must be between 0 and 256 inclusive.");
+                    intRule = 0;
                 }
             } catch (Exception e){
-                System.out.println("Invalid Input");
+                System.out.println("Invalid input- please try again.");
             }
         }
 
