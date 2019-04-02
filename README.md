@@ -12,3 +12,5 @@ The program experiences some slowdown problems on my computer, but still runs OK
 
 When generating the array, using a size greater than 50 makes the generated patterns more apparent. Changing the size of the array can also change the sounds produced.
 
+Some rules produce more interesting sounds than others, I suggest 30, 45, and 135.
+
