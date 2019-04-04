@@ -8,7 +8,7 @@ public class Automata {
         int arrLength = 0;
         int intRule = 0;
 
-        while(intRule == 0 || arrLength == 0) {
+        while(intRule == 0 || arrLength == 0) {//menu allowing user to enter array length & rule to use
             try {
                 if(arrLength == 0) {
                     System.out.print("Please enter an array length: ");
@@ -37,19 +37,23 @@ public class Automata {
             if(curGen[i] != '1') curGen[i] = '0';
         }
 
-        new Automata(intRule, new StringBuilder(), new StringBuilder(), new StringBuilder(), curGen);
+        new Automata(intRule, new StringBuilder(), curGen);
     }
 
-    public Automata(int intRule, StringBuilder fourBitNum, StringBuilder eightBitNum, StringBuilder sixteenBitNum, char[] curGen){
+    public Automata(int intRule, StringBuilder fourBitNum, char[] curGen){
         String rule = intToBinary(intRule);
 
         while(true) {
             int fourBitInt = binaryToInt(fourBitNum.toString());
-            int eightBitInt = binaryToInt(eightBitNum.toString());
+            int melodicInt = (int)Math.pow(fourBitInt, 2);
+
+            Note.play(60 + (melodicInt % 14));
+
+            if(melodicInt % 10 == fourBitInt % 10) {
+                Note.play(44 + ((int) Math.pow(fourBitInt, 3) % 14));
+            }
 
             fourBitNum = rhythmDelay(fourBitNum, fourBitInt, curGen);
-            eightBitNum = melodicNote(eightBitNum, eightBitInt, curGen);
-            sixteenBitNum = droneNote(sixteenBitNum, fourBitInt, eightBitInt, curGen);
 
             printArray(curGen);
 
@@ -76,7 +80,7 @@ public class Automata {
         return nextGen;
     }
 
-    public char getNextState(String rule, char left, char at, char right) {//neighborhood refers to the two cells surrounding given index
+    public char getNextState(String rule, char left, char at, char right) {//neighborhood refers to two cells around given index
         if(left == '1' && at == '1' && right == '1') return rule.charAt(0);
         else if(left == '1' && at == '1' && right == '0') return rule.charAt(1);
         else if(left == '1' && at == '0' && right == '1') return rule.charAt(2);
@@ -107,26 +111,6 @@ public class Automata {
         }
 
         return fourBitNum;
-    }
-
-    public StringBuilder melodicNote(StringBuilder eightBitNum, int eightBitInt, char[] curGen) {
-        eightBitNum.append(curGen[curGen.length/2]);
-
-        Note.play(60 + eightBitInt % 14);
-
-        if(eightBitNum.length() > 8) eightBitNum.delete(0, 5);
-
-        return eightBitNum;
-    }
-    //drone note changes when last digit 4bit num = last digit 8bit num
-    public StringBuilder droneNote(StringBuilder sixteenBitNum, int fourBitInt, int eightBitInt, char[] curGen) {
-        sixteenBitNum.append(curGen[curGen.length/2]);
-
-        if(fourBitInt % 10 == eightBitInt % 10) Note.play(44 + binaryToInt(sixteenBitNum.toString()) % 14);
-
-        if(sixteenBitNum.length() > 16) sixteenBitNum.delete(0, 13);
-
-        return sixteenBitNum;
     }
 
     public static String intToBinary(int val) {
